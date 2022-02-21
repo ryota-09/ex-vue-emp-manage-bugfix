@@ -1,4 +1,4 @@
-import {  format } from "date-fns"
+
 /**
  * 従業員情報を表すクラス.
  *
