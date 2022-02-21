@@ -104,6 +104,10 @@ export default class RegisterAdmin extends Vue {
       this.errorMessage = "名前を入力して下さい。"
       this.hasError = true;
     }
+    if( this.mailAddress === "" || !this.mailAddress.includes("@")){
+      this.errorMessage = "適切な形でメールアドレスを入力してください。"
+      this.hasError = true;
+    }
     if( this.password === "" || this.password.length < 8){
       this.errorMessage = "パスワードは8文字以上で入力してください。"
       this.hasError = true;
