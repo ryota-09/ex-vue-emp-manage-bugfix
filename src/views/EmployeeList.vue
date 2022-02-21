@@ -26,7 +26,7 @@
                 employee.name
               }}</router-link>
             </td>
-            <td>{{ employee.hireDate }}</td>
+            <td>{{ formatHireDate(employee.hireDate) }}</td>
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
@@ -38,6 +38,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { Employee } from "@/types/employee";
+import { format } from "date-fns"
 /**
  * 従業員一覧を表示する画面.
  */
@@ -65,6 +66,13 @@ export default class EmployeeList extends Vue {
     // 非同期で外部APIから取得しているので、async/await使わないとGetterで取得できない
     // ページング機能実装のため最初の10件に絞り込み
     this.currentEmployeeList = this.$store.getters.getAllEmployees;
+  }
+  /**
+  * 入社日の表記を◯年◯月○日という表記にするメソッド.
+  * @returns yyyy年MM月dd日の形に整形された日付
+  */
+  public formatHireDate(date: Date): string{
+     return format(date, "yyyy年MM月dd日");
   }
   /**
    * 現在表示されている従業員一覧の数を返す.
