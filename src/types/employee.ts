@@ -37,8 +37,8 @@ export class Employee {
   * 入社日の表記を◯年◯月○日という表記にするメソッド.
   * @returns yyyy年MM月dd日の形に整形された日付
   */
-   public formatHireDate(date: Date): string{
-    return format(date, "yyyy年MM月dd日");
+   public formatHireDate(): string{
+    return format(this.hireDate, "yyyy年MM月dd日");
  }
 
   public get id(): number {
