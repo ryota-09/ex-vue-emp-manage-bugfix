@@ -118,7 +118,6 @@ export default class RegisterAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
-
     this.lastName = "";
     this.firstName = "";
     this.mailAddress = "";
