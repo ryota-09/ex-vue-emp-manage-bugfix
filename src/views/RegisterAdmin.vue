@@ -62,7 +62,9 @@
         </div>
         <div class="row">
           <div class="input-field col s6">
+
             <div class="error-message">{{ errorMessage }}</div>
+
             <button
               class="btn btn-large btn-register waves-effect waves-light"
               type="button"
@@ -100,7 +102,9 @@ export default class RegisterAdmin extends Vue {
   private comfirmedPassword = "";
   //エラーメッセージ
   private errorMessage = "";
-  
+  //エラーFrag
+  private hasError = false;
+
 
   /**
    * 管理者情報を登録する.
@@ -110,8 +114,25 @@ export default class RegisterAdmin extends Vue {
    * @returns Promiseオブジェクト
    */
   async registerAdmin(): Promise<void> {
+
     if( !(this.password === this.comfirmedPassword ) ){
       this.errorMessage = "パスワードが一致しません。"
+      this.hasError = false;
+    }
+    //エラー処理
+    if( this.lastName === "" || this.firstName === ""){
+      this.errorMessage = "名前を入力して下さい。"
+      this.hasError = true;
+    }
+    if( this.mailAddress === "" || !this.mailAddress.includes("@")){
+      this.errorMessage = "適切な形でメールアドレスを入力してください。"
+      this.hasError = true;
+    }
+    if( this.password === "" || this.password.length < 8){
+      this.errorMessage = "パスワードは8文字以上で入力してください。"
+      this.hasError = true;
+    }
+    if(this.hasError){
       return;
     }
     // 管理者登録処理
@@ -122,7 +143,17 @@ export default class RegisterAdmin extends Vue {
     });
     console.dir("response:" + JSON.stringify(response));
 
-    this.$router.push("/loginAdmin");
+    if(response.data.status === "success"){
+        this.$router.push("/loginAdmin");
+      } else {
+        this.errorMessage = "登録できませんでした。";  
+      }
+
+    this.lastName = "";
+    this.firstName = "";
+    this.mailAddress = "";
+    this.password = "";
+
   }
 }
 </script>
