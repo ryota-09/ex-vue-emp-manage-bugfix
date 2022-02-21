@@ -79,6 +79,9 @@ export default class LoginAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
+    if(response.data.status === "error"){
+      alert("ログインに失敗しました。")
+    }
 
     // 従業員一覧に遷移する
     this.$router.push("/employeeList");
