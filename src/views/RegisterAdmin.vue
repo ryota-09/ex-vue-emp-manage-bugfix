@@ -51,6 +51,7 @@
         </div>
         <div class="row">
           <div class="input-field col s6">
+            <div class="error-message">{{ errorMessage }}</div>
             <button
               class="btn btn-large btn-register waves-effect waves-light"
               type="button"
@@ -70,7 +71,6 @@
 import { Component, Vue } from "vue-property-decorator";
 import config from "@/const/const";
 import axios from "axios";
-import { Employee } from "@/types/employee";
 
 /**
  * 管理者登録をする画面.
@@ -85,7 +85,8 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
-
+  //エラーメッセージ
+  private errorMessage = "";
   /**
    * 管理者情報を登録する.
    *
@@ -101,11 +102,11 @@ export default class RegisterAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
-    if(response.data.status === "error"){
-      alert("登録できませんでした。")
-    }
-
-    this.$router.push("/loginAdmin");
+    if(response.data.status === "success"){
+        this.$router.push("/loginAdmin");
+      } else {
+        this.errorMessage = "登録できませんでした。";  
+      }
   }
 }
 </script>
@@ -113,5 +114,8 @@ export default class RegisterAdmin extends Vue {
 <style scoped>
 .register-page {
   width: 600px;
+}
+.error-message{
+  color: red;
 }
 </style>
