@@ -47,7 +47,6 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
-
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
    *
