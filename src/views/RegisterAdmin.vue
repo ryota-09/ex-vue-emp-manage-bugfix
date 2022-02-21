@@ -48,6 +48,17 @@
             />
             <label for="password">パスワード</label>
           </div>
+          <div class="input-field col s12">
+            <input
+              id="comfirmed-password"
+              type="password"
+              class="validate"
+              minlength="8"
+              v-model="comfirmedPassword"
+              required
+            />
+            <label for="comfirmed-password">確認用パスワード</label>
+          </div>
         </div>
         <div class="row">
           <div class="input-field col s6">
@@ -87,9 +98,10 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  //確認用パスワード
+  private comfirmedPassword = "";
   //エラーメッセージ
   private errorMessage = "";
-
   //エラーFrag
   private hasError = false;
 
@@ -102,7 +114,11 @@ export default class RegisterAdmin extends Vue {
    * @returns Promiseオブジェクト
    */
   async registerAdmin(): Promise<void> {
-    this.hasError = false;
+
+    if( !(this.password === this.comfirmedPassword ) ){
+      this.errorMessage = "パスワードが一致しません。"
+      this.hasError = false;
+    }
     //エラー処理
     if( this.lastName === "" || this.firstName === ""){
       this.errorMessage = "名前を入力して下さい。"

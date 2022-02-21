@@ -62,7 +62,8 @@
             </tr>
             <tr>
               <th nowrap>給料</th>
-              <td><span>{{currentEmployee.salary.toLocaleString()}}</span>円</td>
+
+              <td>{{ currentEmployee.salary }}円</td>
             </tr>
             <tr>
               <th nowrap>特性</th>
