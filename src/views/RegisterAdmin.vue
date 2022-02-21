@@ -70,6 +70,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import config from "@/const/const";
 import axios from "axios";
+import { Employee } from "@/types/employee";
 
 /**
  * 管理者登録をする画面.
@@ -100,6 +101,9 @@ export default class RegisterAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
+    if(response.data.status === "error"){
+      alert("登録できませんでした。")
+    }
 
     this.$router.push("/loginAdmin");
   }
