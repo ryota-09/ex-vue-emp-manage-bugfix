@@ -27,6 +27,7 @@
           </div>
           <div class="row">
             <div class="input-field col s12">
+              <div class="error-message">{{ errorMessage }}</div>
               <button
                 class="btn btn-register waves-effect waves-light col s12"
                 type="button"
@@ -65,6 +66,8 @@ export default class LoginAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  //エラーメッセージ
+  private errorMessage = "";
 
   /**
    * ログインする.
@@ -79,9 +82,11 @@ export default class LoginAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
-    if(response.data.status === "error"){
-      alert("ログインに失敗しました。")
-    }
+    if(response.data.status === "success"){
+      this.$router.push("/employeeList");
+      } else {
+        this.errorMessage = "ログインに失敗しました。";
+      }
 
     // 従業員一覧に遷移する
     this.$router.push("/employeeList");
@@ -92,5 +97,8 @@ export default class LoginAdmin extends Vue {
 <style scoped>
 .login-page {
   width: 600px;
+}
+.errorMessage{
+  color: red;
 }
 </style>
