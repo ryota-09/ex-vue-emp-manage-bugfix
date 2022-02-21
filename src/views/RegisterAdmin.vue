@@ -51,7 +51,9 @@
         </div>
         <div class="row">
           <div class="input-field col s6">
-            <div>{{ errorMessage }}</div>
+
+            <div class="error-message">{{ errorMessage }}</div>
+
             <button
               class="btn btn-large btn-register waves-effect waves-light"
               type="button"
@@ -87,8 +89,10 @@ export default class RegisterAdmin extends Vue {
   private password = "";
   //エラーメッセージ
   private errorMessage = "";
+
   //エラーFrag
   private hasError = false;
+
 
   /**
    * 管理者情報を登録する.
@@ -122,13 +126,18 @@ export default class RegisterAdmin extends Vue {
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
+
+    if(response.data.status === "success"){
+        this.$router.push("/loginAdmin");
+      } else {
+        this.errorMessage = "登録できませんでした。";  
+      }
+
     this.lastName = "";
     this.firstName = "";
     this.mailAddress = "";
     this.password = "";
 
-
-    this.$router.push("/employeeList");
   }
 }
 </script>
@@ -136,5 +145,8 @@ export default class RegisterAdmin extends Vue {
 <style scoped>
 .register-page {
   width: 600px;
+}
+.error-message{
+  color: red;
 }
 </style>
