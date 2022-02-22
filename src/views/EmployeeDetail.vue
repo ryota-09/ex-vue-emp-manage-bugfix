@@ -27,7 +27,7 @@
               </td>
             </tr>
             <tr>
-              <th nowrap>性別</th>
+              <th nowrap>性別</th>bra
               <td>
                 <span>{{currentEmployee.gender}}</span>
               </td>
@@ -146,7 +146,8 @@ export default class EmployeeDetail extends Vue {
    * ライフサイクルフックのcreatedイベント利用
    */
   created(): void {
-    if( this.$store.getters.getLogedInFrag === false ){
+    if( sessionStorage.getItem("isLogedIn") === "false" ){
+      alert("ログインしてください。");
       this.$router.push("/loginAdmin");
     }
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
