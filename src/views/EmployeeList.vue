@@ -11,7 +11,7 @@
     </nav>
     <div class="employee-serch">
         <span>名前検索: </span><input type="text" v-on:change="serchResultList" v-model="serchText">
-        <button class="searchBtn" type="button" v-on:click="onclick">検索</button>
+        <!-- <button class="searchBtn" type="button" v-on:click="onclick">検索</button> -->
     </div><br>
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <div class="row">
@@ -25,7 +25,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id" v-show="!showFrag">
+          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id" v-show="showFrag">
             <td>
               <router-link :to="'/employeeDetail/' + employee.id">{{
                 employee.name
@@ -36,7 +36,7 @@
           </tr>
         </tbody>
         <tbody>
-          <tr v-for="employee of serchResultList" v-bind:key="employee.id" v-show="showFrag">
+          <tr v-for="employee of serchResultList" v-bind:key="employee.id" v-show="!showFrag">
                 <td>
                   <router-link :to="'/employeeDetail/' + employee.id">
                     {{ employee.name }}
