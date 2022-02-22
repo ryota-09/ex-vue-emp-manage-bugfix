@@ -145,15 +145,35 @@ export default class EmployeeDetail extends Vue {
    * Vuexストア内のGetterを呼ぶ。
    * ライフサイクルフックのcreatedイベント利用
    */
-  created(): void {
+  async created(): Promise<void> {
+
     if( this.$store.getters.getLogedInFrag === false ){
       this.$router.push("/loginAdmin");
     }
+
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
     const employeeId = parseInt(this.$route.params.id);
+    
+    //currentEmployeeに直接格納する
+    const res = await axios.get("http://153.127.48.168:8080/ex-emp-api/employee/" + employeeId)
+    this.currentEmployee = new Employee(
+            res.data.employee.id,
+            res.data.employee.name,
+            res.data.employee.image,
+            res.data.employee.gender,
+            new Date(res.data.employee.hireDate),
+            res.data.employee.mailAddress,
+            res.data.employee.zipCode,
+            res.data.employee.address,
+            res.data.employee.telephone,
+            res.data.employee.salary,
+            res.data.employee.characteristics,
+            res.data.employee.dependentsCount
+      )
+    
 
     // VuexストアのGetter、getEmployeeById()メソッドに先ほど取得したIDを渡し、１件の従業員情報を取得し、戻り値をcurrentEmployee属性に代入する
-    this.currentEmployee = this.$store.getters.getEmployeeById(employeeId);
+    // this.currentEmployee = this.$store.getters.getEmployeeById(employeeId);
 
     // 今取得した従業員情報から画像パスを取り出し、imgディレクトリの名前を前に付与(文字列連結)してcurrentEmployeeImage属性に代入する
     this.currentEmployeeImage = `${config.EMP_WEBAPI_URL}/img/${this.currentEmployee.image}`;
