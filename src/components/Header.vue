@@ -12,10 +12,10 @@
           <router-link to="/registerAdmin">
             管理者登録
           </router-link>
-          <router-link to="/loginAdmin">
+          <router-link to="/loginAdmin" v-show="!isLogedIn">
             <i class="fas fa-sign-in-alt"></i>ログイン
           </router-link>
-          <router-link to="/logoutAdmin">
+          <router-link to="/logoutAdmin" v-show="isLogedIn">
             <i class="fas fa-sign-in-alt"></i>ログアウト
           </router-link>
         </div>
@@ -28,7 +28,18 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-export default class Header extends Vue {}
+export default class Header extends Vue {
+  private isLogedIn = false;
+
+  created(): void{
+    let logInStateStr = sessionStorage.getItem("isLogedIn")
+    if(logInStateStr === "true"){
+      this.isLogedIn = true
+    } else {
+      this.isLogedIn = false;
+    }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
