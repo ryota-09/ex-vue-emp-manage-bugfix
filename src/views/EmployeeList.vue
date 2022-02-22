@@ -26,7 +26,8 @@
                 employee.name
               }}</router-link>
             </td>
-            <td>{{ employee.hireDate }}</td>
+            <td>{{ employee.salaryStringPretty }}</td>
+            <td>{{ employee.formatHireDate }}</td>
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
@@ -47,7 +48,6 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
-
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
    *
@@ -59,6 +59,9 @@ export default class EmployeeList extends Vue {
    * 取得してからゲットするため、async awaitを利用している。
    */
   async created(): Promise<void> {
+    if( this.$store.getters.getLogedInFrag === false ){
+      this.$router.push("/loginAdmin");
+    }
     await this.$store.dispatch("getEmployeeList");
 
     // 従業員一覧情報をVuexストアから取得

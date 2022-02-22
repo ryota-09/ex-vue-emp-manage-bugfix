@@ -12,6 +12,7 @@ export default new Vuex.Store({
   state: {
     totalEmployeeCount: 0,
     employees: new Array<Employee>(),
+    isLogedIn: false
   }, // end state
   actions: {
     /**
@@ -36,6 +37,13 @@ export default new Vuex.Store({
   }, // end actions
   mutations: {
     /**
+     * ログインFragを切り替えるメソッド.
+     * @param state - ステイト
+     */
+    isLogedInHandler(state){
+      state.isLogedIn = !state.isLogedIn;
+    },
+    /**
      * 従業員一覧情報を作成してstateに格納する.
      *
      * @param context コンテキスト
@@ -59,7 +67,7 @@ export default new Vuex.Store({
             employee.name,
             employee.image,
             employee.gender,
-            employee.hireDate,
+            new Date(employee.hireDate),
             employee.mailAddress,
             employee.zipCode,
             employee.address,
@@ -120,6 +128,15 @@ export default new Vuex.Store({
         );
       };
     },
+     /**
+     * ログインFragを取得するgetter.
+     *
+     * @param state ステート
+     * @returns ログインFrag「
+     */
+      getLogedInFrag(state) {
+        return state.isLogedIn;
+      },
   }, // end getters
   modules: {}, // end modules
 });

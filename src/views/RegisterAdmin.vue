@@ -25,6 +25,20 @@
           </div>
         </div>
         <div class="row">
+              <div class="input-field col s12">
+                <input
+                  id="address"
+                  type="text"
+                  class="validate"
+                  v-model="addressNum"
+                  required
+                />
+                <label for="address">郵便番号 (ハイフンを含めない)</label>
+                <button type="button" v-on:click="addressSerch">住所検索</button>
+                <span>{{ address }}</span>
+              </div>
+        </div>
+        <div class="row">
           <div class="input-field col s12">
             <input
               id="email"
@@ -48,9 +62,23 @@
             />
             <label for="password">パスワード</label>
           </div>
+          <div class="input-field col s12">
+            <input
+              id="comfirmed-password"
+              type="password"
+              class="validate"
+              minlength="8"
+              v-model="comfirmedPassword"
+              required
+            />
+            <label for="comfirmed-password">確認用パスワード</label>
+          </div>
         </div>
         <div class="row">
           <div class="input-field col s6">
+
+            <div class="error-message">{{ errorMessage }}</div>
+
             <button
               class="btn btn-large btn-register waves-effect waves-light"
               type="button"
@@ -84,6 +112,30 @@ export default class RegisterAdmin extends Vue {
   private mailAddress = "";
   // パスワード
   private password = "";
+  //確認用パスワード
+  private comfirmedPassword = "";
+  //エラーメッセージ
+  private errorMessage = "";
+  //エラーFrag
+  private hasError = false;
+  //郵便番号
+  private addressNum = "";
+  //住所情報
+  private address = "";
+
+  /**
+   * 非同期で住所検索を行うメソッド.
+   * @ returns - プロミスオブジェクト
+   */
+  async addressSerch(): Promise<void>{
+    const res = await axios.get('https://zipcoda.net/api', {
+    adapter: require('axios-jsonp'),
+    params: {
+        zipcode: this.addressNum
+        }
+    });
+    this.address = res.data.items[0].address
+  }
 
   /**
    * 管理者情報を登録する.
@@ -93,15 +145,47 @@ export default class RegisterAdmin extends Vue {
    * @returns Promiseオブジェクト
    */
   async registerAdmin(): Promise<void> {
+
+    if( !(this.password === this.comfirmedPassword ) ){
+      this.errorMessage = "パスワードが一致しません。"
+      this.hasError = false;
+    }
+    //エラー処理
+    if( this.lastName === "" || this.firstName === ""){
+      this.errorMessage = "名前を入力して下さい。"
+      this.hasError = true;
+    }
+    if( this.mailAddress === "" || !this.mailAddress.includes("@")){
+      this.errorMessage = "適切な形でメールアドレスを入力してください。"
+      this.hasError = true;
+    }
+    if( this.password === "" || this.password.length < 8){
+      this.errorMessage = "パスワードは8文字以上で入力してください。"
+      this.hasError = true;
+    }
+    if(this.hasError){
+      return;
+    }
     // 管理者登録処理
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
       name: this.lastName + " " + this.firstName,
+      address: this.address,
       mailAddress: this.mailAddress,
       password: this.password,
     });
     console.dir("response:" + JSON.stringify(response));
 
-    this.$router.push("/employeeList");
+    if(response.data.status === "success"){
+        this.$router.push("/loginAdmin");
+      } else {
+        this.errorMessage = "登録できませんでした。";  
+      }
+
+    this.lastName = "";
+    this.firstName = "";
+    this.mailAddress = "";
+    this.password = "";
+
   }
 }
 </script>
@@ -109,5 +193,8 @@ export default class RegisterAdmin extends Vue {
 <style scoped>
 .register-page {
   width: 600px;
+}
+.error-message{
+  color: red;
 }
 </style>
