@@ -87,7 +87,8 @@ export default class LoginAdmin extends Vue {
       } else {
         this.errorMessage = "ログインに失敗しました。";
       }
-
+    //ログインFragをtrueにする
+    this.$store.commit("isLogedInHandler");
     // 従業員一覧に遷移する
     this.$router.push("/employeeList");
   }

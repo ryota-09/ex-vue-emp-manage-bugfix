@@ -25,6 +25,20 @@
           </div>
         </div>
         <div class="row">
+              <div class="input-field col s12">
+                <input
+                  id="address"
+                  type="text"
+                  class="validate"
+                  v-model="addressNum"
+                  required
+                />
+                <label for="address">郵便番号 (ハイフンを含めない)</label>
+                <button type="button" v-on:click="addressSerch">住所検索</button>
+                <span>{{ address }}</span>
+              </div>
+        </div>
+        <div class="row">
           <div class="input-field col s12">
             <input
               id="email"
@@ -104,7 +118,24 @@ export default class RegisterAdmin extends Vue {
   private errorMessage = "";
   //エラーFrag
   private hasError = false;
+  //郵便番号
+  private addressNum = "";
+  //住所情報
+  private address = "";
 
+  /**
+   * 非同期で住所検索を行うメソッド.
+   * @ returns - プロミスオブジェクト
+   */
+  async addressSerch(): Promise<void>{
+    const res = await axios.get('https://zipcoda.net/api', {
+    adapter: require('axios-jsonp'),
+    params: {
+        zipcode: this.addressNum
+        }
+    });
+    this.address = res.data.items[0].address
+  }
 
   /**
    * 管理者情報を登録する.
@@ -138,6 +169,7 @@ export default class RegisterAdmin extends Vue {
     // 管理者登録処理
     const response = await axios.post(`${config.EMP_WEBAPI_URL}/insert`, {
       name: this.lastName + " " + this.firstName,
+      address: this.address,
       mailAddress: this.mailAddress,
       password: this.password,
     });
