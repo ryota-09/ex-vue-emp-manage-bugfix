@@ -146,6 +146,11 @@ export default class EmployeeDetail extends Vue {
    * ライフサイクルフックのcreatedイベント利用
    */
   async created(): Promise<void> {
+
+    if( this.$store.getters.getLogedInFrag === false ){
+      this.$router.push("/loginAdmin");
+    }
+
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
     const employeeId = parseInt(this.$route.params.id);
     

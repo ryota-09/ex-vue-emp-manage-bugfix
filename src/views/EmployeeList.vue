@@ -20,13 +20,13 @@
         </thead>
 
         <tbody>
-          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id">
+          <tr v-for="employee of hireDesendEmployeeList" v-bind:key="employee.id">
             <td>
               <router-link :to="'/employeeDetail/' + employee.id">{{
                 employee.name
               }}</router-link>
             </td>
-            <td>{{ employee.formatHireDate }}</td>
+            <td>{{ employee.hireDate }}</td>
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
@@ -47,7 +47,6 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
-
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
    *
@@ -59,6 +58,9 @@ export default class EmployeeList extends Vue {
    * 取得してからゲットするため、async awaitを利用している。
    */
   async created(): Promise<void> {
+    if( this.$store.getters.getLogedInFrag === false ){
+      this.$router.push("/loginAdmin");
+    }
     await this.$store.dispatch("getEmployeeList");
 
     // 従業員一覧情報をVuexストアから取得
@@ -66,6 +68,22 @@ export default class EmployeeList extends Vue {
     // ページング機能実装のため最初の10件に絞り込み
     this.currentEmployeeList = this.$store.getters.getAllEmployees;
   }
+  /**
+   * 入社日の降順で並び替えた後の従業員リストを取得するgetter.
+   * @returns 並び順変更後の従業員リスト
+   */
+  get hireDesendEmployeeList(): Array<Employee>{
+    let copiedArray = this.currentEmployeeList
+    return copiedArray.sort(function(a:Employee, b:Employee) {
+      if(a.hireDate > b.hireDate){
+        return -1
+      } else {
+        return 1;
+      }
+    }
+    );
+  }
+  
   /**
    * 現在表示されている従業員一覧の数を返す.
    *
