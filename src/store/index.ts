@@ -59,12 +59,12 @@ export default new Vuex.Store({
             employee.name,
             employee.image,
             employee.gender,
-            new Date(employee.hireDate),
+            employee.hireDate,
             employee.mailAddress,
             employee.zipCode,
             employee.address,
             employee.telephone,
-            employee.salaryStringPretty(employee.salary),
+            employee.salary,
             employee.characteristics,
             employee.dependentsCount
           )
