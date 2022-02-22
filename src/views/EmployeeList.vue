@@ -10,7 +10,7 @@
       </div>
     </nav>
     <div class="employee-serch">
-        <span>名前検索: </span><input type="text" v-model="serchText">
+        <span>名前検索: </span><input type="text" v-on:change="serchResultList" v-model="serchText">
         <button class="searchBtn" type="button" v-on:click="onclick">検索</button>
     </div><br>
     <div>従業員数:{{ getEmployeeCount }}人</div>
@@ -101,21 +101,15 @@ export default class EmployeeList extends Vue {
   /**
    * 
    */
-  get serchResultList(): Array<Employee>{
-      let newArray = new Array<Employee>();
+  serchResultList(): void{
       for(let employee of this.currentEmployeeList){
         if(employee.name.includes(this.serchText)){
-          newArray.push(employee);
+          this.currentEmployeeList.push(employee);
         }
       }
-      if(!newArray){
+      if(!this.currentEmployeeList){
         alert("1件もありませんでしたので全件表示します")
-        newArray = this.currentEmployeeList;
       }
-    return newArray;
-  }
-  onclick(): void{
-    this.showFrag = true;
   }
 }
 </script>
