@@ -151,7 +151,21 @@ export default class EmployeeDetail extends Vue {
     
     //currentEmployeeに直接格納する
     const res = await axios.get("http://153.127.48.168:8080/ex-emp-api/employee/" + employeeId)
-    this.currentEmployee = res.data.employee
+    this.currentEmployee = new Employee(
+            res.data.employee.id,
+            res.data.employee.name,
+            res.data.employee.image,
+            res.data.employee.gender,
+            new Date(res.data.employee.hireDate),
+            res.data.employee.mailAddress,
+            res.data.employee.zipCode,
+            res.data.employee.address,
+            res.data.employee.telephone,
+            res.data.employee.salary,
+            res.data.employee.characteristics,
+            res.data.employee.dependentsCount
+      )
+    
 
     // VuexストアのGetter、getEmployeeById()メソッドに先ほど取得したIDを渡し、１件の従業員情報を取得し、戻り値をcurrentEmployee属性に代入する
     // this.currentEmployee = this.$store.getters.getEmployeeById(employeeId);
