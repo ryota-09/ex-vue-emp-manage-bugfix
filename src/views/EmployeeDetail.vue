@@ -62,8 +62,13 @@
             </tr>
             <tr>
               <th nowrap>給料</th>
+<<<<<<< HEAD
+              <td>{{ currentEmployee.salaryStringPretty }}円</td>
+=======
 
               <td>{{ currentEmployee.salary }}円</td>
+
+>>>>>>> a6eb4d0ced6448e054c4d8f1fdf7145b010f0d48
             </tr>
             <tr>
               <th nowrap>特性</th>
