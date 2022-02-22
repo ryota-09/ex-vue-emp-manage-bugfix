@@ -6,8 +6,13 @@
         <div class="col s12 teal">
           <a class="breadcrumb">従業員リスト</a>
         </div>
+        
       </div>
     </nav>
+    <div class="employee-serch">
+        <span>名前検索: </span><input type="text" v-on:change="serchResultList" v-model.lazy="serchText">
+        <!-- <button class="searchBtn" type="button" v-on:click="onclick">検索</button> -->
+    </div><br>
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <div class="row">
       <table class="striped">
@@ -47,6 +52,13 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+
+  //検索キーワード
+  private serchText = "";
+  //初期配列
+  private initArray = new Array<Employee>();
+
+
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
    *
@@ -92,6 +104,23 @@ export default class EmployeeList extends Vue {
   get getEmployeeCount(): number {
     return this.currentEmployeeList.length;
   }
+  /**
+   * 
+   */
+  serchResultList(): void{
+    let initArray = this.currentEmployeeList;
+    this.currentEmployeeList = new Array<Employee>();
+      for(let employee of initArray){
+        if(employee.name.includes(this.serchText)){
+          this.currentEmployeeList.push(employee);
+        }
+      }
+      if(this.currentEmployeeList.length === 0){
+        alert("1件もありませんでしたので全件表示します")
+        this.currentEmployeeList = this.$store.getters.getAllEmployees;
+      }
+      this.serchText = "";
+  }
 }
 </script>
 
@@ -104,7 +133,9 @@ export default class EmployeeList extends Vue {
 
 .searchBtn {
   display: block;
+  width: 50px;
+}
+.employee-serch{
   width: 150px;
-  margin: 0 auto;
 }
 </style>
