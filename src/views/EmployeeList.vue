@@ -71,7 +71,8 @@ export default class EmployeeList extends Vue {
    * @returns 並び順変更後の従業員リスト
    */
   get hireDesendEmployeeList(): Array<Employee>{
-    return this.currentEmployeeList.sort(function(a:Employee, b:Employee) {
+    let copiedArray = this.currentEmployeeList
+    return copiedArray.sort(function(a:Employee, b:Employee) {
       if(a.hireDate > b.hireDate){
         return -1
       } else {
