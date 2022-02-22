@@ -10,7 +10,7 @@
       </div>
     </nav>
     <div class="employee-serch">
-        <span>名前検索: </span><input type="text" v-on:change="serchResultList" v-model="serchText">
+        <span>名前検索: </span><input type="text" v-on:change="serchResultList" v-model.lazy="serchText">
         <!-- <button class="searchBtn" type="button" v-on:click="onclick">検索</button> -->
     </div><br>
     <div>従業員数:{{ getEmployeeCount }}人</div>
@@ -25,7 +25,7 @@
         </thead>
 
         <tbody>
-          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id" v-show="showFrag">
+          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id">
             <td>
               <router-link :to="'/employeeDetail/' + employee.id">{{
                 employee.name
@@ -35,21 +35,6 @@
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
-        <tbody>
-          <tr v-for="employee of serchResultList" v-bind:key="employee.id" v-show="!showFrag">
-                <td>
-                  <router-link :to="'/employeeDetail/' + employee.id">
-                    {{ employee.name }}
-                  </router-link>
-                </td>
-                <td>
-                  {{ employee.hireDate }}
-                </td>
-                <td>
-                  {{ employee.dependentsCount }}
-                </td>
-              </tr>
-            </tbody>
       </table>
     </div>
   </div>
@@ -69,8 +54,8 @@ export default class EmployeeList extends Vue {
   private employeeCount = 0;
   //検索キーワード
   private serchText = "";
-  //検索結果表示部分のFrag
-  private showFrag = false;
+  //初期配列
+  private initArray = new Array<Employee>();
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -102,14 +87,18 @@ export default class EmployeeList extends Vue {
    * 
    */
   serchResultList(): void{
-      for(let employee of this.currentEmployeeList){
+    let initArray = this.currentEmployeeList;
+    this.currentEmployeeList = new Array<Employee>();
+      for(let employee of initArray){
         if(employee.name.includes(this.serchText)){
           this.currentEmployeeList.push(employee);
         }
       }
-      if(!this.currentEmployeeList){
+      if(this.currentEmployeeList.length === 0){
         alert("1件もありませんでしたので全件表示します")
+        this.currentEmployeeList = this.$store.getters.getAllEmployees;
       }
+      this.serchText = "";
   }
 }
 </script>
