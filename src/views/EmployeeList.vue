@@ -6,8 +6,13 @@
         <div class="col s12 teal">
           <a class="breadcrumb">従業員リスト</a>
         </div>
+        
       </div>
     </nav>
+    <div class="employee-serch">
+        <span>名前検索: </span><input type="text" v-model="serchText">
+        <button class="searchBtn" type="button" v-on:click="onclick">検索</button>
+    </div><br>
     <div>従業員数:{{ getEmployeeCount }}人</div>
     <div class="row">
       <table class="striped">
@@ -20,16 +25,31 @@
         </thead>
 
         <tbody>
-          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id">
+          <tr v-for="employee of currentEmployeeList" v-bind:key="employee.id" v-show="!showFrag">
             <td>
               <router-link :to="'/employeeDetail/' + employee.id">{{
                 employee.name
               }}</router-link>
             </td>
-            <td>{{ employee.formatHireDate }}</td>
+            <td>{{ employee.hireDate }}</td>
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
+        <tbody>
+          <tr v-for="employee of serchResultList" v-bind:key="employee.id" v-show="showFrag">
+                <td>
+                  <router-link :to="'/employeeDetail/' + employee.id">
+                    {{ employee.name }}
+                  </router-link>
+                </td>
+                <td>
+                  {{ employee.hireDate }}
+                </td>
+                <td>
+                  {{ employee.dependentsCount }}
+                </td>
+              </tr>
+            </tbody>
       </table>
     </div>
   </div>
@@ -47,6 +67,10 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+  //検索キーワード
+  private serchText = "";
+  //検索結果表示部分のFrag
+  private showFrag = false;
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -74,6 +98,25 @@ export default class EmployeeList extends Vue {
   get getEmployeeCount(): number {
     return this.currentEmployeeList.length;
   }
+  /**
+   * 
+   */
+  get serchResultList(): Array<Employee>{
+      let newArray = new Array<Employee>();
+      for(let employee of this.currentEmployeeList){
+        if(employee.name.includes(this.serchText)){
+          newArray.push(employee);
+        }
+      }
+      if(!newArray){
+        alert("1件もありませんでしたので全件表示します")
+        newArray = this.currentEmployeeList;
+      }
+    return newArray;
+  }
+  onclick(): void{
+    this.showFrag = true;
+  }
 }
 </script>
 
@@ -86,7 +129,9 @@ export default class EmployeeList extends Vue {
 
 .searchBtn {
   display: block;
+  width: 50px;
+}
+.employee-serch{
   width: 150px;
-  margin: 0 auto;
 }
 </style>
