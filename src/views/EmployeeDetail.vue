@@ -62,8 +62,13 @@
             </tr>
             <tr>
               <th nowrap>給料</th>
+<<<<<<< HEAD
+              <td>{{ currentEmployee.salaryStringPretty }}円</td>
+=======
 
               <td>{{ currentEmployee.salary }}円</td>
+
+>>>>>>> a6eb4d0ced6448e054c4d8f1fdf7145b010f0d48
             </tr>
             <tr>
               <th nowrap>特性</th>
@@ -146,6 +151,9 @@ export default class EmployeeDetail extends Vue {
    * ライフサイクルフックのcreatedイベント利用
    */
   created(): void {
+    if( this.$store.getters.getLogedInFrag === false ){
+      this.$router.push("/loginAdmin");
+    }
     // 送られてきたリクエストパラメータのidをnumberに変換して取得する
     const employeeId = parseInt(this.$route.params.id);
 
