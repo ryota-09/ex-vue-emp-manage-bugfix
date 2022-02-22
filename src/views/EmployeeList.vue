@@ -14,6 +14,10 @@
         <!-- <button class="searchBtn" type="button" v-on:click="onclick">検索</button> -->
     </div><br>
     <div>従業員数:{{ getEmployeeCount }}人</div>
+    <div id="pagination">
+      <span class="page-change-btn" v-on:click="showPrev">前のページへ</span>
+      <span class="page-change-btn" v-on:click="showNext">次のページへ</span>
+    </div>
     <div class="row">
       <table class="striped">
         <thead>
@@ -52,6 +56,12 @@ export default class EmployeeList extends Vue {
   private currentEmployeeList: Array<Employee> = [];
   // 従業員数
   private employeeCount = 0;
+  //10件表示
+  private page = 0;
+  //表示する枚数
+  private dispEmployeesCount = 10;
+  private isStartPage = true;
+  private isEndPage = false;
 
   //検索キーワード
   private serchText = "";
@@ -104,6 +114,51 @@ export default class EmployeeList extends Vue {
   get getEmployeeCount(): number {
     return this.currentEmployeeList.length;
   }
+
+  ////////////////////////////////ここから下がページネーション処理///////////////////////////////////////
+  /**
+   * ページの始まりかどうか確認するメソッド.
+   * @returns スタートかどうかを判断するFrag
+   */
+  startPageOrNot(): boolean{
+    return this.page === 0;
+  }
+   /**
+   * 最後の始まりかどうか確認するメソッド.
+   * @remarks ページを求める剰余(this.page)を利用して、全件数よりも数が多くなったら最後のページと判断する。
+   * @returns 最後のページかどうかを判断するFrag
+   */
+  endPageOrNot(): boolean{
+    return (this.page + 1) * this.dispEmployeesCount >= this.currentEmployeeList.length;
+  }
+  /**
+   * 前ページに戻るメソッド.
+   */
+  showPrev (): void{
+    if(this.startPageOrNot()){
+      this.isStartPage = true;
+      return;
+    }
+    this.page--;
+  }
+  /**
+   * 次のページに進むメソッド.
+   */
+  showNext (): void{
+    if( this.endPageOrNot() ){
+      this.isEndPage = true;
+      return;
+    }
+    this.page++;
+    this.isStartPage = false;
+  }
+  /**
+   * 表示させるページのgetter.
+   */
+  get dispEmployees (): Array<Employee>{
+    let startPage = this.page * this.dispEmployeesCount;
+    return this.currentEmployeeList.slice(startPage, startPage + this.dispEmployeesCount)
+  }
   /**
    * 
    */
@@ -120,11 +175,17 @@ export default class EmployeeList extends Vue {
         this.currentEmployeeList = this.$store.getters.getAllEmployees;
       }
       this.serchText = "";
+
   }
 }
 </script>
 
 <style scoped>
+.page-change-btn{
+  color: green;
+  margin: 0 10px;
+  cursor: pointer;
+}
 .searchForm {
   margin-bottom: 20px;
   width: 450px;
