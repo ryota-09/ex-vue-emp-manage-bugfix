@@ -30,12 +30,7 @@
                 employee.name
               }}</router-link>
             </td>
-<<<<<<< .merge_file_BSZDgi
             <td>{{ employee.hireDate }}</td>
-=======
-            <td>{{ employee.salaryStringPretty }}</td>
-            <td>{{ employee.formatHireDate }}</td>
->>>>>>> .merge_file_FQLBl3
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
