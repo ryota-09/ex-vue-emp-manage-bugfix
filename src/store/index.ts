@@ -64,7 +64,7 @@ export default new Vuex.Store({
             employee.zipCode,
             employee.address,
             employee.telephone,
-            employee.salaryStringPretty(employee.salary),
+            employee.salary,
             employee.characteristics,
             employee.dependentsCount
           )
