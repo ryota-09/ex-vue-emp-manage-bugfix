@@ -27,6 +27,7 @@
               }}</router-link>
             </td>
             <td>{{ employee.salaryStringPretty }}</td>
+            <td>{{ employee.formatHireDate }}</td>
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
