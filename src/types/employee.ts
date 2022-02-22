@@ -33,9 +33,17 @@ export class Employee {
     private _dependentsCount: number
   ) {}
 
+<<<<<<< HEAD
   get salaryStringPretty(): string{
     return this.salary.toLocaleString();
   }
+=======
+
+  get salaryStringPretty(): string{
+    return this.salary.toLocaleString();
+  }
+
+>>>>>>> a6eb4d0ced6448e054c4d8f1fdf7145b010f0d48
   /**
   * 入社日の表記を◯年◯月○日という表記にするメソッド.
   * @returns yyyy年MM月dd日の形に整形された日付
@@ -43,6 +51,10 @@ export class Employee {
  public formatHireDate(): string{
     return format(this.hireDate, "yyyy年MM月dd日");
  }
+<<<<<<< HEAD
+=======
+
+>>>>>>> a6eb4d0ced6448e054c4d8f1fdf7145b010f0d48
 
   public get id(): number {
     return this._id;
