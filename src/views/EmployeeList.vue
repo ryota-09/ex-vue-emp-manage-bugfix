@@ -30,7 +30,12 @@
                 employee.name
               }}</router-link>
             </td>
+<<<<<<< .merge_file_BSZDgi
             <td>{{ employee.hireDate }}</td>
+=======
+            <td>{{ employee.salaryStringPretty }}</td>
+            <td>{{ employee.formatHireDate }}</td>
+>>>>>>> .merge_file_FQLBl3
             <td>{{ employee.dependentsCount }}人</td>
           </tr>
         </tbody>
@@ -53,9 +58,11 @@ export default class EmployeeList extends Vue {
   private employeeCount = 0;
   //10件表示
   private page = 0;
+  //表示する枚数
   private dispEmployeesCount = 10;
   private isStartPage = true;
   private isEndPage = false;
+
 
   /**
    * Vuexストアのアクション経由で非同期でWebAPIから従業員一覧を取得する.
@@ -68,6 +75,9 @@ export default class EmployeeList extends Vue {
    * 取得してからゲットするため、async awaitを利用している。
    */
   async created(): Promise<void> {
+    if( this.$store.getters.getLogedInFrag === false ){
+      this.$router.push("/loginAdmin");
+    }
     await this.$store.dispatch("getEmployeeList");
 
     // 従業員一覧情報をVuexストアから取得
